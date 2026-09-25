@@ -1,0 +1,903 @@
+:root {
+  /* 經典黑曜金 (Obsidian Dark) */
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.85);
+  --bg-card-subtle: rgba(255, 255, 255, 0.03);
+  --bg-card-contrast: rgba(0, 0, 0, 0.35);
+  --border-subtle: rgba(255, 255, 255, 0.09);
+  --border-glow: rgba(217, 119, 6, 0.35);
+  
+  --text-main: #f3f4f6;
+  --text-title: #ffffff;
+  --text-muted: #9ca3af;
+  --text-dim: #6b7280;
+  
+  --gold-primary: #d97706;
+  --gold-glow: #f59e0b;
+  --gold-soft: rgba(245, 158, 11, 0.15);
+  
+  --star-main: #fef08a; /* 暗黑模式下的主星色 */
+  --star-highlight: #f59e0b;
+  
+  --jade-primary: #10b981;
+  --jade-soft: rgba(16, 185, 129, 0.15);
+  
+  --cyan-primary: #06b6d4;
+  --cyan-soft: rgba(6, 182, 212, 0.15);
+  
+  --crimson-primary: #ef4444;
+  --crimson-soft: rgba(239, 68, 68, 0.15);
+
+  --amber-warning: #fbbf24;
+  --amber-soft: rgba(251, 191, 36, 0.12);
+
+  --font-serif: 'Noto Serif TC', serif;
+  --font-sans: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 25px rgba(245, 158, 11, 0.2);
+}
+
+/* 宣紙雅 (Zen White) 溫潤水墨古籍模式：文字蒼勁清澈，背景乾淨如宣紙，杜絕灰暗髒色 */
+[data-theme="zen"] {
+  --bg-primary: #f5f2eb;
+  --bg-secondary: #ece7db;
+  --bg-card: #ffffff;
+  --bg-card-subtle: #f9f7f2;
+  --bg-card-contrast: #f4efe4;
+  --border-subtle: rgba(0, 0, 0, 0.1);
+  --border-glow: #b45309;
+
+  /* 文字：極致清晰好讀之濃墨黑與沉靜灰 */
+  --text-main: #1f2937;
+  --text-title: #0f172a;
+  --text-muted: #4b5563;
+  --text-dim: #6b7280;
+
+  /* 主色：古樸沉著之赭石茶褐 */
+  --gold-primary: #92400e;
+  --gold-glow: #b45309;
+  --gold-soft: rgba(180, 83, 9, 0.08);
+
+  /* 主星色：在白底上為清晰典雅的硃砂紅與群青藍，字字分明！ */
+  --star-main: #991b1b;
+  --star-highlight: #1e3a8a;
+
+  --jade-primary: #047857;
+  --jade-soft: rgba(4, 120, 87, 0.08);
+
+  --cyan-primary: #0369a1;
+  --cyan-soft: rgba(3, 105, 161, 0.08);
+
+  --crimson-primary: #b91c1c;
+  --crimson-soft: rgba(185, 28, 28, 0.08);
+
+  --amber-warning: #92400e;
+  --amber-soft: rgba(146, 64, 14, 0.08);
+
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-glow: 0 2px 10px rgba(180, 83, 9, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* 標題規範 */
+h1, h2, h3, h4, .lesson-title {
+  color: var(--text-title);
+}
+
+/* 表單元素全局主題適配 */
+input, select, textarea {
+  font-family: var(--font-sans);
+  color: var(--text-main);
+  background: var(--bg-card);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gold-glow) !important;
+  outline: none;
+}
+
+/* 主題切換時全局平滑過渡 */
+*, *::before, *::after {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+}
+
+/* 但不讓動畫元素受到這個過渡影響（會打斷動畫） */
+.feynman-fab-btn,
+.feynman-drawer-panel,
+.ziwei-palace-cell,
+.module-nav-item,
+.btn-primary,
+.btn-secondary {
+  transition: all 0.2s ease !important;
+}
+
+/* 滾動條美化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 113, 108, 0.3);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-glow);
+}
+
+/* 玻璃擬態 / 卡片底板 — 完整定義見下方「增強玻璃卡片系統」區塊 */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-panel:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-card), var(--shadow-glow);
+}
+
+/* 頂部導航條 */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 68px;
+  background: var(--bg-secondary);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.5rem;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-symbol {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--gold-soft);
+  border: 1px solid var(--border-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.brand-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: 0.05em;
+  color: var(--text-title);
+}
+
+.brand-sub {
+  font-size: 0.7rem;
+  color: var(--gold-glow);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* 導航按鈕群 */
+.nav-tabs {
+  display: flex;
+  gap: 6px;
+  background: var(--bg-card-contrast);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.nav-tab-btn {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  padding: 7px 13px;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.nav-tab-btn:hover {
+  color: var(--text-title);
+  background: var(--gold-soft);
+}
+
+.nav-tab-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-glow));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 主佈局容器 */
+.main-container {
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 3rem;
+  width: 100%;
+}
+
+/* 雙欄課堂佈局 */
+.classroom-layout {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .classroom-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 側欄課程導航 */
+.module-nav-sidebar {
+  position: sticky;
+  top: 84px;
+  max-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.module-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  overflow-y: auto;
+  max-height: calc(100vh - 160px);
+}
+
+.module-nav-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card-subtle);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  color: var(--text-muted);
+}
+
+.module-nav-item:hover {
+  background: var(--gold-soft);
+  color: var(--text-title);
+  transform: translateX(2px);
+}
+
+.module-nav-item.active {
+  background: var(--gold-soft);
+  border-color: var(--gold-glow);
+  color: var(--gold-primary);
+  font-weight: 600;
+}
+
+.module-number-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--bg-card-contrast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold-glow);
+  flex-shrink: 0;
+}
+
+.module-nav-item.active .module-number-badge {
+  background: var(--gold-primary);
+  color: #fff;
+}
+
+/* 主課堂內容卡片群 */
+.lesson-card {
+  padding: 28px;
+  margin-bottom: 20px;
+}
+
+.lesson-header {
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.lesson-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--gold-soft);
+  color: var(--gold-primary);
+  border: 1px solid var(--border-glow);
+  margin-bottom: 12px;
+}
+
+.lesson-title {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-title);
+}
+
+/* 費曼生活切入鉤子 */
+.feynman-hook-box {
+  background: var(--gold-soft);
+  border-left: 4px solid var(--gold-primary);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.feynman-hook-icon {
+  font-size: 26px;
+  color: var(--gold-primary);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.feynman-hook-content h4 {
+  font-size: 0.9rem;
+  color: var(--gold-primary);
+  margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.feynman-hook-content p {
+  font-size: 1rem;
+  color: var(--text-main);
+  line-height: 1.7;
+}
+
+/* 知識剖析卡片 */
+.content-section {
+  margin-bottom: 26px;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: var(--font-serif);
+  margin-bottom: 12px;
+  color: var(--text-title);
+}
+
+.section-label.vernacular {
+  color: var(--cyan-primary);
+}
+
+.section-label.essence {
+  color: var(--gold-primary);
+}
+
+.section-label.calibration {
+  color: var(--amber-warning);
+}
+
+.section-body {
+  font-size: 0.98rem;
+  color: var(--text-main);
+  line-height: 1.8;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+}
+
+/* 黃色警示卡片：科學校準 */
+.warning-calibration-box {
+  background: var(--amber-soft);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  margin-top: 24px;
+  display: flex;
+  gap: 14px;
+}
+
+.warning-icon {
+  color: var(--amber-warning);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.warning-body {
+  font-size: 0.92rem;
+  color: var(--text-main);
+  line-height: 1.7;
+}
+
+/* 按鈕樣式 */
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-glow));
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--gold-soft);
+  color: var(--text-title);
+  border-color: var(--border-glow);
+}
+
+/* 筆記文本輸入 */
+.note-textarea {
+  width: 100%;
+  height: 100px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.note-textarea:focus {
+  border-color: var(--gold-glow);
+}
+
+
+/* ========================================================
+   右下方浮動筆記圓球 (FAB) 與懸浮展開面板
+======================================================== */
+.feynman-fab-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  height: 54px;
+  padding: 0 20px 0 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-glow));
+  color: #fff;
+  border: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 700;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.feynman-fab-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+
+.feynman-fab-btn.open {
+  background: var(--text-dim);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.feynman-fab-pulse {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid var(--bg-card);
+  animation: pulseDot 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+/* 浮動展開筆記抽屜面板 */
+.feynman-drawer-panel {
+  position: fixed;
+  bottom: 96px;
+  right: 30px;
+  width: 440px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 120px);
+  z-index: 999;
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: feynmanPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes feynmanPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ========================================================
+   頁面進入動畫系統
+======================================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease both;
+}
+
+.lesson-card {
+  animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.module-nav-sidebar {
+  animation: slideInLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ========================================================
+   增強玻璃卡片系統
+======================================================== */
+.glass-panel {
+  position: relative;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.glass-panel:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-card), var(--shadow-glow);
+}
+
+/* 黑曜金主題的環境光暈（深色模式限定，有層次感） */
+:root .glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.04) 0%,
+    transparent 50%,
+    rgba(6, 182, 212, 0.02) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="zen"] .glass-panel::before {
+  background: linear-gradient(
+    135deg,
+    rgba(180, 83, 9, 0.03) 0%,
+    transparent 100%
+  );
+}
+
+/* ========================================================
+   增強互動元素
+======================================================== */
+/* 導航項目 hover 提升 */
+.module-nav-item:hover {
+  background: var(--gold-soft);
+  color: var(--text-title);
+  transform: translateX(3px);
+  border-color: var(--border-glow);
+}
+
+.module-nav-item.active {
+  background: var(--gold-soft);
+  border-color: var(--gold-glow);
+  color: var(--gold-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.12);
+}
+
+/* 按鈕 hover 效果增強 */
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(245, 158, 11, 0.25);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary:hover {
+  background: var(--gold-soft);
+  color: var(--text-title);
+  border-color: var(--border-glow);
+  transform: translateY(-1px);
+}
+
+/* ========================================================
+   增強費曼提示卡
+======================================================== */
+.feynman-hook-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.feynman-hook-box::after {
+  content: '💡';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* ========================================================
+   警示卡片過渡增強
+======================================================== */
+.warning-calibration-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.warning-calibration-box::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--amber-warning), var(--gold-primary));
+  border-radius: 0 0 0 0;
+}
+
+/* ========================================================
+   響應式優化
+======================================================== */
+@media (max-width: 900px) {
+  .classroom-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .module-nav-sidebar {
+    position: static;
+    max-height: 280px;
+  }
+
+  .main-container {
+    padding: 0.85rem 0.85rem 2rem;
+  }
+
+  .lesson-card {
+    padding: 18px;
+  }
+
+  .feynman-drawer-panel {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 86px;
+  }
+
+  .feynman-fab-btn {
+    right: 16px;
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-tabs {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding: 4px;
+    scrollbar-width: none;
+  }
+
+  .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-tab-btn {
+    white-space: nowrap;
+    font-size: 0.78rem;
+    padding: 6px 10px;
+  }
+
+  .brand-title {
+    font-size: 1rem;
+  }
+
+  .lesson-title {
+    font-size: 1.35rem;
+  }
+}
+
+/* ========================================================
+   深色模式主題環境光背景紋理（黑曜金限定）
+======================================================== */
+:root body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 15% 15%, rgba(245, 158, 11, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 45%);
+}
+
+[data-theme="zen"] body::before {
+  background:
+    radial-gradient(ellipse at 15% 15%, rgba(180, 83, 9, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(4, 120, 87, 0.02) 0%, transparent 45%);
+}
+
+/* ========================================================
+   宮位格子 hover 效果（用於紫微盤格）
+======================================================== */
+.ziwei-palace-cell {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ziwei-palace-cell:hover {
+  transform: scale(1.02);
+  z-index: 2;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================================
+   文字選取顏色
+======================================================== */
+::selection {
+  background: var(--gold-soft);
+  color: var(--gold-primary);
+}
+
+[data-theme="zen"] ::selection {
+  background: rgba(180, 83, 9, 0.15);
+  color: #92400e;
+}
