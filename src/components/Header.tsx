@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Scale, Compass, Shield, Tv, Sparkles, Palette } from 'lucide-react';
 
-export type NavTabType = 'classroom' | 'yijing' | 'ziwei' | 'comparisons' | 'sandbox' | 'playlists';
+export type NavTabType = 'portal' | 'philosophy' | 'classroom' | 'yijing' | 'ziwei' | 'comparisons' | 'sandbox' | 'playlists';
 
 interface HeaderProps {
   currentTab: NavTabType;
@@ -28,7 +28,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab, progr
 
   return (
     <header className="app-header">
-      <div className="brand-wrapper">
+      <div className="brand-wrapper" style={{ cursor: 'pointer' }} onClick={() => setCurrentTab('portal')}>
         <div className="brand-symbol">
           <span>☯️</span>
         </div>
@@ -38,8 +38,24 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab, progr
         </div>
       </div>
 
-      {/* 導航按鈕組 */}
+      {/* 導航按鈕組：以排盤與起卦雙引子為首，引申思想核心與五紀學習內容 */}
       <nav className="nav-tabs" style={{ flexWrap: 'wrap' }}>
+        <button
+          className={`nav-tab-btn ${currentTab === 'portal' ? 'active' : ''}`}
+          onClick={() => setCurrentTab('portal')}
+          style={{ fontWeight: currentTab === 'portal' ? 700 : 500 }}
+        >
+          <Sparkles size={15} color={currentTab === 'portal' ? 'var(--gold-glow)' : 'currentColor'} /> 
+          雙引子推演 (紫微 × 易經)
+        </button>
+        <button
+          className={`nav-tab-btn ${currentTab === 'philosophy' ? 'active' : ''}`}
+          onClick={() => setCurrentTab('philosophy')}
+          style={{ fontWeight: currentTab === 'philosophy' ? 700 : 500 }}
+        >
+          <Compass size={15} color={currentTab === 'philosophy' ? 'var(--gold-glow)' : 'currentColor'} /> 
+          思想核心 ＆ 五紀全譜
+        </button>
         <button
           className={`nav-tab-btn ${currentTab === 'classroom' ? 'active' : ''}`}
           onClick={() => setCurrentTab('classroom')}
@@ -50,13 +66,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab, progr
           className={`nav-tab-btn ${currentTab === 'yijing' ? 'active' : ''}`}
           onClick={() => setCurrentTab('yijing')}
         >
-          <Sparkles size={15} /> 易經完整64卦寶庫
-        </button>
-        <button
-          className={`nav-tab-btn ${currentTab === 'ziwei' ? 'active' : ''}`}
-          onClick={() => setCurrentTab('ziwei')}
-        >
-          <Compass size={15} /> 紫微排盤引擎
+          <Sparkles size={15} /> 易經64卦寶庫
         </button>
         <button
           className={`nav-tab-btn ${currentTab === 'comparisons' ? 'active' : ''}`}
@@ -68,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab, progr
           className={`nav-tab-btn ${currentTab === 'sandbox' ? 'active' : ''}`}
           onClick={() => setCurrentTab('sandbox')}
         >
-          <Compass size={15} /> 互動演練沙盒
+          <Compass size={15} /> 陽宅與三才沙盒
         </button>
         <button
           className={`nav-tab-btn ${currentTab === 'playlists' ? 'active' : ''}`}

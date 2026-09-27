@@ -16,7 +16,7 @@ interface PalaceData {
   niAdvice: string;
 }
 
-export const ZiweiChart: React.FC = () => {
+export const ZiweiChart: React.FC<{ onNavigateToPhilosophy?: () => void }> = ({ onNavigateToPhilosophy }) => {
   // 曆法類型：國曆 (公曆/西曆) vs 農曆 (陰曆)
   const [calendarType, setCalendarType] = useState<'solar' | 'lunar'>('solar');
 
@@ -1187,6 +1187,47 @@ export const ZiweiChart: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* 命盤引申至倪師思想核心橋樑 */}
+        <div style={{
+          marginTop: '28px',
+          background: 'linear-gradient(135deg, rgba(217, 119, 6, 0.12), rgba(16, 185, 129, 0.08))',
+          border: '1px solid var(--border-glow)',
+          borderRadius: '14px',
+          padding: '20px 24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '16px'
+        }}>
+          <div style={{ flex: 1, minWidth: '280px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--gold-glow)', fontWeight: 700, fontSize: '1rem', marginBottom: '4px' }}>
+              <Compass size={18} /> 命盤已排定，倪師為何說「知命是為了改命」？
+            </div>
+            <div style={{ fontSize: '0.86rem', color: 'var(--text-main)', lineHeight: 1.55 }}>
+              命盤僅揭示<strong>天時與先天性格原型（天紀 1/3）</strong>。要突破化忌阻滯與煞星考驗，必須借力<strong>《地紀》陽宅名位相符法（1/3）</strong>與<strong>《人紀》黃帝內經經方自律（1/3）</strong>。
+            </div>
+          </div>
+
+          {onNavigateToPhilosophy && (
+            <button
+              onClick={onNavigateToPhilosophy}
+              className="btn-primary"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px 20px',
+                fontSize: '0.92rem',
+                boxShadow: '0 4px 16px rgba(217, 119, 6, 0.3)'
+              }}
+            >
+              <span>進一步引申：研習倪師思想核心與五紀體系</span>
+              <Sparkles size={16} />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

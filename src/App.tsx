@@ -8,19 +8,20 @@ import { BaguaRoomSimulator } from './components/BaguaRoomSimulator';
 import { SeasonFlowSimulator } from './components/SeasonFlowSimulator';
 import { ComparisonMatrix } from './components/ComparisonMatrix';
 import { PersonalRadarSandbox } from './components/PersonalRadarSandbox';
-import { FeynmanNotes } from './components/FeynmanNotes';
 import { PlaylistsViewer } from './components/PlaylistsViewer';
 import { YijingExplorer } from './components/YijingExplorer';
 import { ZiweiChart } from './components/ZiweiChart';
 import { ZiweiSuite } from './components/ZiweiSuite';
 import { CaseExplorer } from './components/CaseExplorer';
 import { BenchAndCases } from './components/BenchAndCases';
+import { PortalEntrance } from './components/PortalEntrance';
+import { NiPhilosophySystem } from './components/NiPhilosophySystem';
 import { 
   AlertTriangle, CheckCircle2, Layers, ArrowRight
 } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [currentTab, setCurrentTab] = useState<NavTabType>('classroom');
+  const [currentTab, setCurrentTab] = useState<NavTabType>('portal');
   const [activeLessonId, setActiveLessonId] = useState<string>(lessonsData[0].id);
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
 
@@ -61,6 +62,22 @@ export const App: React.FC = () => {
 
       {/* 主工作區 */}
       <main className="main-container" style={{ flex: 1 }}>
+        {/* 0. 天紀入門：雙引子推演門戶（紫微命盤 × 易經起卦） */}
+        {currentTab === 'portal' && (
+          <PortalEntrance 
+            onNavigateToPhilosophy={() => {
+              setCurrentTab('philosophy');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateToTab={(tab) => setCurrentTab(tab as NavTabType)}
+          />
+        )}
+
+        {/* 0.5. 倪海廈學術思想核心 ＆ 五紀經典全譜專區 */}
+        {currentTab === 'philosophy' && (
+          <NiPhilosophySystem onNavigateToTab={(tab) => setCurrentTab(tab as NavTabType)} />
+        )}
+
         {/* 1. 課堂模式 */}
         {currentTab === 'classroom' && (
           <div className="classroom-layout">
@@ -214,7 +231,10 @@ export const App: React.FC = () => {
         {/* 2. 易經六十四卦完整生活處境寶庫模式 */}
         {currentTab === 'yijing' && (
           <div>
-            <YijingExplorer />
+            <YijingExplorer onNavigateToPhilosophy={() => {
+              setCurrentTab('philosophy');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} />
           </div>
         )}
 
@@ -250,9 +270,6 @@ export const App: React.FC = () => {
           </div>
         )}
       </main>
-
-      {/* 右下方浮動圓球 (FAB)：隨時隨地一鍵開展/收合費曼筆記 */}
-      <FeynmanNotes currentLesson={currentLesson} />
 
       {/* 底部全站聲明與研習安全邊界 */}
       <footer style={{
