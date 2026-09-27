@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   Compass, Heart, BookOpen, Layers, Shield, Sparkles, 
   MapPin, ArrowRight, Activity, Flame, Eye, 
-  ExternalLink, Award, Lightbulb
+  ExternalLink, Award, Lightbulb, CheckCircle2, XCircle, 
+  Stethoscope, FileText
 } from 'lucide-react';
 
 interface NiPhilosophySystemProps {
@@ -10,11 +11,28 @@ interface NiPhilosophySystemProps {
 }
 
 export const NiPhilosophySystem: React.FC<NiPhilosophySystemProps> = ({ onNavigateToTab }) => {
-  // 選中的思想核心分頁：'core' (四大思想核心) | 'feynman' (費曼大白話解讀六大重點) | 'curriculum' (五紀學習體系) | 'roadmap' (五階研習路徑) | 'principles' (倪師金句與辨偽)
-  const [activeTab, setActiveTab] = useState<'core' | 'feynman' | 'curriculum' | 'roadmap' | 'principles'>('core');
+  // 選中的思想核心分頁：'core' | 'feynman' | 'health' | 'notes' | 'curriculum' | 'roadmap' | 'principles'
+  const [activeTab, setActiveTab] = useState<'core' | 'feynman' | 'health' | 'notes' | 'curriculum' | 'roadmap' | 'principles'>('core');
   const [selectedPillar, setSelectedPillar] = useState<number>(1);
   const [selectedFeynmanTopic, setSelectedFeynmanTopic] = useState<number>(1);
   const [selectedBook, setSelectedBook] = useState<string>('tianji');
+
+  // 健康六大標準自我檢視互動狀態（源自《快樂生活的問診單》）
+  const [healthChecks, setHealthChecks] = useState<Record<string, boolean>>({
+    sleep: true,
+    appetite: true,
+    bowel: true,
+    urine: true,
+    temp: true,
+    vitality: true
+  });
+
+  const toggleHealth = (key: string) => {
+    setHealthChecks(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // 聽課筆記與實戰密碼子分頁
+  const [selectedNoteCategory, setSelectedNoteCategory] = useState<'tianji' | 'dimai' | 'diji_diary' | 'zhongjing'>('tianji');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -70,6 +88,22 @@ export const NiPhilosophySystem: React.FC<NiPhilosophySystemProps> = ({ onNaviga
         >
           <Lightbulb size={16} color={activeTab === 'feynman' ? 'var(--gold-glow)' : 'currentColor'} /> 
           費曼大白話解讀六大重點
+        </button>
+        <button
+          onClick={() => setActiveTab('health')}
+          className={`nav-tab-btn ${activeTab === 'health' ? 'active' : ''}`}
+          style={{ fontWeight: activeTab === 'health' ? 700 : 500 }}
+        >
+          <Stethoscope size={16} color={activeTab === 'health' ? 'var(--jade-primary)' : 'currentColor'} /> 
+          🩺 健康六大黃金標準檢測
+        </button>
+        <button
+          onClick={() => setActiveTab('notes')}
+          className={`nav-tab-btn ${activeTab === 'notes' ? 'active' : ''}`}
+          style={{ fontWeight: activeTab === 'notes' ? 700 : 500 }}
+        >
+          <FileText size={16} color={activeTab === 'notes' ? 'var(--gold-glow)' : 'currentColor'} /> 
+          📖 天紀地紀筆記與仲景心法
         </button>
         <button
           onClick={() => setActiveTab('curriculum')}
@@ -647,6 +681,353 @@ export const NiPhilosophySystem: React.FC<NiPhilosophySystemProps> = ({ onNaviga
                   </div>
                   <div style={{ fontSize: '0.88rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
                     懂得「扶陽祛寒」的底層思維：遇到身體問題先看整體環境（體溫、氣血循環、水分代謝），改善大環境勝過在細枝末節糾纏。
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* 內容分頁 1.6：倪海廈「健康六大黃金標準」自我檢視（源自《快樂生活的問診單》） */}
+      {activeTab === 'health' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          {/* 總結卡片 */}
+          <div className="glass-panel" style={{ padding: '26px 30px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.06) 100%)', border: '1px solid var(--border-glow)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <Stethoscope size={26} color="var(--jade-primary)" />
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.45rem', color: 'var(--text-title)' }}>
+                倪海廈健康六大黃金標準（出自《快樂生活的問診單》與漢唐醫案）
+              </h2>
+            </div>
+            <p style={{ fontSize: '0.94rem', color: 'var(--text-main)', lineHeight: 1.7, margin: 0 }}>
+              倪師名言：<strong>「如果一個病人能符合這六大標準，就算西醫儀器說他體內有腫瘤，他也絕對死不了，因為他的心陽、胃氣根本還在！反之，就算所有血液數值完全正常，但夜夜失眠、手腳冰冷、十天不大便，這就叫死症已具。」</strong>
+              點選下方項目進行健康即時檢視：
+            </p>
+          </div>
+
+          {/* 六大標準互動卡片群 */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+            {[
+              {
+                key: 'sleep',
+                num: '1',
+                title: '睡眠：一覺到天亮（心臟功能生血藏神）',
+                desc: '躺下半小時內入睡，熟睡至天明，無繁雜噩夢，醒來神清氣爽。',
+                warning: '若夜間 1-3 點必醒為肝經病變；3-5 點必醒為肺經病變；整夜失眠為心腎不交。',
+                meridian: '心經、肝經、肺經'
+              },
+              {
+                key: 'appetite',
+                num: '2',
+                title: '胃口：正常食慾，晨起飢餓（脾陽健旺、胃氣充足）',
+                desc: '早晨起床有飢餓感想要吃早餐，吃得香，消化順暢不泛酸。',
+                warning: '不思飲食、脘腹脹滿提示脾濕不化；若暴飲暴食消穀善飢為胃火中焦實熱。',
+                meridian: '脾經、胃經'
+              },
+              {
+                key: 'bowel',
+                num: '3',
+                title: '大便：每天早晨排便一次，香蕉條狀（大腸經當令排毒）',
+                desc: '晨起喝溫水或早餐後順暢排出，顏色金黃成條，無殘便感。',
+                warning: '便秘數日、溏瀉黏稠、腹痛下利，代表體內陽虛寒結或下焦濕熱。',
+                meridian: '大腸經 (卯時 5-7點)'
+              },
+              {
+                key: 'urine',
+                num: '4',
+                title: '小便：一日 5-7 次，淡黃清澈（小腸與腎臟氣化）',
+                desc: '排尿順暢無灼痛，量足清亮，夜尿 0-1 次。',
+                warning: '頻尿滴瀝、夜尿頻繁、泡沫經久不散，代表下焦虛寒、腎陽不足。',
+                meridian: '膀胱經、腎經'
+              },
+              {
+                key: 'temp',
+                num: '5',
+                title: '體溫：手腳常年溫熱，額涼手足溫（心陽下行達四末）',
+                desc: '一年四季手掌足底皆溫潤暖和，頭面部清爽微涼。',
+                warning: '手腳冰冷、冬夜腳伸不暖、吹冷氣關節酸痛，代表心陽衰弱、深層陰寒凝聚！',
+                meridian: '心包經、心陽氣化'
+              },
+              {
+                key: 'vitality',
+                num: '6',
+                title: '生機：男子晨勃、女子月經無痛色鮮紅（陽氣充盛生生不息）',
+                desc: '男清晨陽道自然勃發；女月經 28-30 天一週，鮮紅無血塊，經前無劇痛。',
+                warning: '男子無晨勃代表腎陽式微；女子痛經血塊黑紫色代表子宮嚴重虛寒（宮寒）。',
+                meridian: '肝腎二經、衝任二脈'
+              }
+            ].map(item => {
+              const isChecked = healthChecks[item.key];
+              return (
+                <div
+                  key={item.key}
+                  onClick={() => toggleHealth(item.key)}
+                  style={{
+                    background: isChecked ? 'var(--bg-card-contrast)' : 'rgba(239, 68, 68, 0.05)',
+                    border: isChecked ? '1px solid var(--jade-primary)' : '1px solid rgba(239, 68, 68, 0.3)',
+                    borderRadius: '12px',
+                    padding: '18px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: isChecked ? '0 4px 12px rgba(16, 185, 129, 0.1)' : 'none'
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--text-title)' }}>
+                        {item.title}
+                      </span>
+                      {isChecked ? (
+                        <CheckCircle2 size={20} color="#10B981" />
+                      ) : (
+                        <XCircle size={20} color="#EF4444" />
+                      )}
+                    </div>
+                    <div style={{ fontSize: '0.86rem', color: 'var(--text-main)', lineHeight: 1.6, marginBottom: '8px' }}>
+                      ✓ 正常指標：{item.desc}
+                    </div>
+                    {!isChecked && (
+                      <div style={{ fontSize: '0.82rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.08)', padding: '6px 10px', borderRadius: '6px', lineHeight: 1.5 }}>
+                        ⚠️ 倪師警示：{item.warning}
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed var(--border-subtle)', fontSize: '0.75rem', color: 'var(--text-dim)' }}>
+                    <span>對應臟腑：{item.meridian}</span>
+                    <span style={{ color: isChecked ? 'var(--jade-primary)' : '#ef4444', fontWeight: 700 }}>
+                      {isChecked ? '狀態正常' : '點擊標記為正常'}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 評估總結框 */}
+          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glow)', borderRadius: '14px', padding: '20px 24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '10px' }}>
+              <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-title)' }}>
+                健康六大黃金標準評估：目前符合 {Object.values(healthChecks).filter(Boolean).length} / 6 項
+              </div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--gold-glow)', fontWeight: 600 }}>
+                {Object.values(healthChecks).filter(Boolean).length === 6 ? '✨ 心陽充沛，正氣存內！' : '⚠️ 存在部分陰陽偏頗，宜調整作息'}
+              </div>
+            </div>
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-main)', lineHeight: 1.65, margin: 0 }}>
+              💡 <strong>倪師養生真傳：</strong> 手腳常年溫熱是人體心陽強健的最高表徵！若有手腳冰冷或失眠問題，日常生活中應遠離一切生冷寒涼、冰品冷飲；晚間於 23 點前入睡，常以熱水泡腳溫通下焦，配合運動微汗，陽氣生生不息，百病不生。
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* 內容分頁 1.7：天紀地紀原版聽課筆記與仲景心法密碼 */}
+      {activeTab === 'notes' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          {/* 筆記類別切換鈕 */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+            {[
+              { id: 'tianji', title: '① 天機道：十二宮經絡藏象', sub: '肺寅大卯胃辰宮，氣色相法秘傳' },
+              { id: 'dimai', title: '② 地脈道：三大凶宅避坑', sub: '中宮廁所傷心、西北廚房傷父' },
+              { id: 'diji_diary', title: '③ 地紀日記：千山我獨行', sub: '倪師未竟宏願真情前言' },
+              { id: 'zhongjing', title: '④ 仲景心法：經方第一方', sub: '桂枝動脈白芍靜脈、去杖湯神威' }
+            ].map(tabItem => {
+              const isSelected = selectedNoteCategory === tabItem.id;
+              return (
+                <div
+                  key={tabItem.id}
+                  onClick={() => setSelectedNoteCategory(tabItem.id as any)}
+                  style={{
+                    background: isSelected ? 'var(--bg-card-contrast)' : 'var(--bg-card-subtle)',
+                    border: isSelected ? '2px solid var(--gold-glow)' : '1px solid var(--border-subtle)',
+                    borderRadius: '10px',
+                    padding: '14px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: isSelected ? 'var(--gold-glow)' : 'var(--text-title)' }}>
+                    {tabItem.title}
+                  </div>
+                  <div style={{ fontSize: '0.76rem', color: 'var(--text-dim)', marginTop: '2px' }}>
+                    {tabItem.sub}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 筆記細節 */}
+          <div className="glass-panel" style={{ padding: '28px' }}>
+            {selectedNoteCategory === 'tianji' && (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                  <Sparkles size={24} color="var(--gold-glow)" />
+                  <h3 style={{ fontSize: '1.35rem', fontFamily: 'var(--font-serif)', color: 'var(--text-title)' }}>
+                    天機道聽課筆記：十二宮經絡對應口訣 ＆ 氣色相法秘傳
+                  </h3>
+                </div>
+
+                <div style={{ background: 'var(--gold-soft)', borderLeft: '4px solid var(--gold-primary)', padding: '16px 20px', borderRadius: '0 8px 8px 0', marginBottom: '20px' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--gold-primary)', fontSize: '0.95rem', marginBottom: '6px' }}>
+                    📜 天紀十二地支宮位與十二經絡臟腑嚴格對應口訣：
+                  </div>
+                  <div style={{ fontSize: '1.05rem', fontWeight: 700, fontFamily: 'var(--font-serif)', color: 'var(--text-title)', letterSpacing: '1px' }}>
+                    「肺寅大卯胃辰宮，脾巳心午小未中，申胱酉腎心包戌，亥焦子膽丑肝通」
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 700, color: 'var(--cyan-primary)', fontSize: '0.92rem', marginBottom: '6px' }}>
+                      ✦ 醫易同源實戰斷疾
+                    </div>
+                    <p style={{ fontSize: '0.88rem', color: 'var(--text-main)', lineHeight: 1.65, margin: 0 }}>
+                      倪師傳授：看斗數盤不僅看富貴貧賤，更看人體臟腑安危！若丑宮（肝經）或寅宮（肺經）有煞星空劫化忌，代表先天肝或肺之防禦系統較脆弱，不可長年酗酒或熬夜，天紀直接指引人紀養生！
+                    </p>
+                  </div>
+
+                  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 700, color: 'var(--jade-primary)', fontSize: '0.92rem', marginBottom: '6px' }}>
+                      ✦ 氣色觀察之「兩週時效法則」
+                    </div>
+                    <p style={{ fontSize: '0.88rem', color: 'var(--text-main)', lineHeight: 1.65, margin: 0 }}>
+                      倪師傳授望診精要：氣色主兩個星期之吉凶。<strong>氣色枯焦</strong>代表凶災已經發生；<strong>氣色枯黃</strong>代表災劫剛發生兩星期內；<strong>氣色暗黑</strong>代表重大病變或凶事將於近期兩週內發生！
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {selectedNoteCategory === 'dimai' && (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                  <MapPin size={24} color="var(--jade-primary)" />
+                  <h3 style={{ fontSize: '1.35rem', fontFamily: 'var(--font-serif)', color: 'var(--text-title)' }}>
+                    地脈道聽課筆記：三大死別凶宅避坑 ＆ 名位相符真訣
+                  </h3>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                  <div style={{ background: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 700, color: '#ef4444', fontSize: '0.92rem', marginBottom: '6px' }}>
+                      ⚠️ 凶宅一：衛生間在房屋正中心（中宮）
+                    </div>
+                    <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', lineHeight: 1.6, margin: 0 }}>
+                      房屋中宮為太極之心臟。若中宮設廁所，污穢濕氣直撲心包，居者易猝發心臟病、心肌梗塞，或家中官司口舌不斷。
+                    </p>
+                  </div>
+
+                  <div style={{ background: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 700, color: '#ef4444', fontSize: '0.92rem', marginBottom: '6px' }}>
+                      ⚠️ 凶宅二：西北角設廚房（火燒天門）
+                    </div>
+                    <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', lineHeight: 1.6, margin: 0 }}>
+                      西北乾位屬金、為父親（一家之主）。廚房乃動刀用火之處（火剋金、刀象）。西北設廚房名為「刀切西北」，主傷父、父親早亡或中風。
+                    </p>
+                  </div>
+
+                  <div style={{ background: 'rgba(245, 158, 11, 0.06)', border: '1px solid rgba(245, 158, 11, 0.25)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 700, color: '#f59e0b', fontSize: '0.92rem', marginBottom: '6px' }}>
+                      ⚠️ 凶宅三：無子宅（缺正東宮位）
+                    </div>
+                    <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', lineHeight: 1.6, margin: 0 }}>
+                      正東為長男震宮。若住宅正東缺角，或正東做客廳、餐廳，則長男無立錐之地，主難生男孩或長男離散。
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ background: 'var(--jade-soft)', border: '1px solid var(--jade-primary)', borderRadius: '10px', padding: '16px' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--jade-primary)', fontSize: '0.92rem', marginBottom: '4px' }}>
+                    ✓ 陽宅吉局化解指南：
+                  </div>
+                  <div style={{ fontSize: '0.88rem', color: 'var(--text-main)', lineHeight: 1.65 }}>
+                    客廳放在西南坤位最好（如客溫和）；父親居西北乾位平步青雲、好丈夫；長子居正東震位朝氣蓬勃。命中有災加上運上有災才會成災，透過名位相符調整動線，即可徹底避開天命凶劫！
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {selectedNoteCategory === 'diji_diary' && (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                  <BookOpen size={24} color="var(--gold-glow)" />
+                  <h3 style={{ fontSize: '1.35rem', fontFamily: 'var(--font-serif)', color: 'var(--text-title)' }}>
+                    《地紀日記》千山我獨行真跡：倪海廈未竟宏圖之赤子誓言
+                  </h3>
+                </div>
+
+                <div style={{ background: 'var(--bg-card-contrast)', border: '1px solid var(--border-glow)', borderRadius: '12px', padding: '20px 24px', marginBottom: '16px', lineHeight: 1.75, fontSize: '0.92rem', color: 'var(--text-main)' }}>
+                  <p style={{ fontStyle: 'italic', color: 'var(--gold-glow)', fontSize: '1rem', marginBottom: '12px' }}>
+                    「我即將開始撰寫地紀。為了能順利完成地紀，我的地紀之旅將極為秘密。我真的無法為了一些個人的問題而耗費時間滯留於一地，因為地紀的目的不僅只是要幫助個人，而是想要幫助千萬上億的華夏子民，也為了重振我華夏聲威！」
+                  </p>
+                  <p>
+                    「現在我正在跟時間賽跑，生命是有限的，希望能趁我有生之年將地紀完成。千山我獨行，我的地紀之旅所有開銷將全由我一人自己負擔，自始至終，在治病上我從未想過要賺大陸人民的錢，只想替大家解決問題。」
+                  </p>
+                  <p style={{ margin: 0 }}>
+                    「雖然有千山萬水要走，但是我甘之如飴。我要看盡人世間一切的起與滅，這一切一切的感受，我都會記載於地紀中，將之故事化，讓下一代都得以做為一位中華兒女為榮！」
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {selectedNoteCategory === 'zhongjing' && (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                  <Flame size={24} color="#ef4444" />
+                  <h3 style={{ fontSize: '1.35rem', fontFamily: 'var(--font-serif)', color: 'var(--text-title)' }}>
+                    仲景心法傳講精要（南寧12萬字實錄）：經方第一方 ＆ 經典方陣
+                  </h3>
+                </div>
+
+                <div style={{ background: 'var(--gold-soft)', borderLeft: '4px solid var(--gold-primary)', padding: '16px 20px', borderRadius: '0 8px 8px 0', marginBottom: '20px' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--gold-primary)', fontSize: '0.95rem', marginBottom: '6px' }}>
+                    💡 桂枝湯方意大解密：動靜脈等長平衡
+                  </div>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.7, margin: 0 }}>
+                    倪師在南寧講座中親解：人體的動脈與靜脈是等長的！<strong>桂枝是辛甘發散走動脈（陽），白芍是酸苦湧泄收斂靜脈（陰）</strong>。桂枝三錢、白芍三錢，等量平衡。光兩味藥血流太快心臟受不了，故加炙甘草甘緩守中護心；生薑大棗色黃補腸胃津液。60% 經方皆從桂枝湯衍生！
+                  </p>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+                  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 700, color: 'var(--jade-primary)', fontSize: '0.92rem', marginBottom: '6px' }}>
+                      ✦ 去杖湯（芍藥甘草附子湯）
+                    </div>
+                    <div style={{ fontSize: '0.86rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
+                      專治重度下肢靜脈曲張、老人腳痛不能走、半夜抽筋。白芍重用至一兩酸收靜脈血，炙甘草一兩護心緩急，炮附子大熱溫陽固表破陰寒，服之可棄拐杖而行！
+                    </div>
+                  </div>
+
+                  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 700, color: 'var(--cyan-primary)', fontSize: '0.92rem', marginBottom: '6px' }}>
+                      ✦ 白虎湯（生石膏降熱不傷元氣）
+                    </div>
+                    <div style={{ fontSize: '0.86rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
+                      陽明經大熱大渴汗出脈洪大時，生石膏 50-100克如天降暴雪，瞬間熄滅體內烈火，且絕不傷人體根本陽氣，勝過所有苦寒抗生素。
+                    </div>
+                  </div>
+
+                  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 700, color: '#ef4444', fontSize: '0.92rem', marginBottom: '6px' }}>
+                      ✦ 大柴胡湯（急性胰腺炎與膽囊炎）
+                    </div>
+                    <div style={{ fontSize: '0.86rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
+                      少陽陽明合病之神方！柴胡、黃芩清肝膽，芍藥、枳實、大黃蕩滌腸道結熱，半夏生薑和胃止嘔，臨證往往一兩劑立止劇痛。
+                    </div>
+                  </div>
+
+                  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 700, color: '#8b5cf6', fontSize: '0.92rem', marginBottom: '6px' }}>
+                      ✦ 溫經湯（婦科不孕與痛經聖方）
+                    </div>
+                    <div style={{ fontSize: '0.86rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
+                      吳茱萸、桂枝暖子宮散深寒；當歸、川芎、芍藥活血行氣；阿膠補血潤燥。專治下焦虛寒、月經不調與多年不孕。
+                    </div>
                   </div>
                 </div>
               </div>

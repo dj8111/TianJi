@@ -59,6 +59,14 @@ export const ZiweiChart: React.FC<{ onNavigateToPhilosophy?: () => void }> = ({ 
     '亥時 (21:00 - 23:00)',
   ];
 
+  // 倪師《天紀·天機道聽課筆記》地支對應十二經絡臟腑口訣：
+  // 「肺寅大卯胃辰宮，脾巳心午小未中，申胱酉腎心包戌，亥焦子膽丑肝通」
+  const BRANCH_ORGAN_MAP: Record<string, string> = {
+    '子': '膽', '丑': '肝', '寅': '肺', '卯': '大腸',
+    '辰': '胃', '巳': '脾', '午': '心', '未': '小腸',
+    '申': '膀胱', '酉': '腎', '戌': '心包', '亥': '三焦'
+  };
+
   // 計算實際排盤所使用的農曆年、月、日與國農曆對照資訊
   const dateInfo = useMemo(() => {
     if (calendarType === 'solar') {
@@ -708,6 +716,9 @@ export const ZiweiChart: React.FC<{ onNavigateToPhilosophy?: () => void }> = ({ 
                 <span style={{ color: 'var(--text-dim)' }}>{p.minorStars.join(' ')}</span>
                 <span style={{ fontWeight: 700, color: 'var(--cyan-primary)' }}>
                   {p.heavenlyStem}{p.earthBranch}
+                  <span style={{ fontSize: '0.68rem', color: 'var(--gold-glow)', marginLeft: '2px', fontWeight: 600 }}>
+                    ·{BRANCH_ORGAN_MAP[p.earthBranch] || ''}
+                  </span>
                 </span>
               </div>
             </div>
@@ -929,6 +940,17 @@ export const ZiweiChart: React.FC<{ onNavigateToPhilosophy?: () => void }> = ({ 
                 </div>
                 <div style={{ fontSize: '0.92rem', color: 'var(--text-main)', lineHeight: 1.65 }}>
                   {selectedPalace.niAdvice}
+                </div>
+              </div>
+
+              {/* 天機道聽課筆記：十二宮臟腑經絡對應（醫易同源） */}
+              <div style={{ background: 'var(--jade-soft)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-subtle)', gridColumn: '1 / -1' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--jade-primary)', fontWeight: 700, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>🩺</span> 【天紀·經絡臟腑對應（醫易同源）】：地支「{selectedPalace.earthBranch}」宮 ➔ 對應人體之【{BRANCH_ORGAN_MAP[selectedPalace.earthBranch]}經】
+                </div>
+                <div style={{ fontSize: '0.88rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
+                  源自倪師《天紀·天機道聽課筆記》：<strong>「肺寅大卯胃辰宮，脾巳心午小未中，申胱酉腎心包戌，亥焦子膽丑肝通」</strong>。
+                  若此【{selectedPalace.name}】宮內逢擎羊、陀羅、煞星或生年化忌，即提示先天此臟腑經絡氣血相對脆弱。平時應依循《人紀》黃帝內經作息重點保養【{BRANCH_ORGAN_MAP[selectedPalace.earthBranch]}】之生機！
                 </div>
               </div>
             </div>
